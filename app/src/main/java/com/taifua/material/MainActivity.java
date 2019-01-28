@@ -2,9 +2,7 @@ package com.taifua.material;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
@@ -16,31 +14,32 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
+/**
+ * 在这里把所有碎片和控件建好
+ * 然后再在fragment类里面写不同的页面
+ */
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener
 {
 
     private DrawerLayout mDrawerLayout;
     private ViewPager viewPager;
     private NavigationView navView;
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
     private PhotoFragment photoFragment = new PhotoFragment();
     private AlbumFragment albumFragment = new AlbumFragment();
     private AssistantFragment assistantFragment = new AssistantFragment();
     private ShareFragment shareFragment = new ShareFragment();
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case android.R.id.home:
@@ -56,8 +55,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);

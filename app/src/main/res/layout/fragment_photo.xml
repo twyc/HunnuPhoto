@@ -3,11 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <GridView
+        android:id="@+id/photo_wall"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="照片"
-        android:textSize="18sp"
-        android:layout_centerInParent="true"/>
-
+        android:columnWidth="90dip"
+        android:stretchMode="columnWidth"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dip"
+        android:gravity="center"
+        ></GridView>
 </RelativeLayout>
