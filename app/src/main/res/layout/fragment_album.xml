@@ -1,13 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="5dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:src="@drawable/sample"
+        android:layout_marginTop="10dp"
+        android:id="@+id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center_horizontal"/>
+
+    <LinearLayout
+        android:background="@drawable/bg_circle"
+        android:layout_marginTop="20dp"
+        android:padding="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryText"
+                android:text="图像名称："
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/image_name"
+                android:textSize="20sp"
+                android:hint="sample.jpg"
+                android:textColor="@color/colorPrimaryText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryText"
+                android:text="图像尺寸："
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/image_size"
+                android:textSize="20sp"
+                android:hint="960 * 541"
+                android:textColor="@color/colorPrimaryText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryText"
+                android:text="人脸位置："
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/image_result"
+                android:textSize="20sp"
+                android:hint="[382,277] [590,258] [732,117]"
+                android:textColor="@color/colorPrimaryText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="80dp"
+        android:id="@+id/choose_from_album"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="识别及分类"
-        android:textSize="18sp"
-        android:layout_centerInParent="true"/>
+        android:textSize="15sp"
+        android:background="@drawable/bg_button"
+        android:text="选择图片"/>
 
-</RelativeLayout>
+</LinearLayout>

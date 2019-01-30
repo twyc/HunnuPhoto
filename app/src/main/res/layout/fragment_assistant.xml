@@ -3,11 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.taifua.material.CustomImageButton
+        android:id="@+id/ass_face"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/ass_choose"
+        android:text="选择"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="自定义功能"
-        android:textSize="18sp"
-        android:layout_centerInParent="true"/>
+        android:textSize="15sp"
+        android:background="@drawable/bg_button"
+        android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/ass_photograph"
+        android:text="拍照"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:background="@drawable/bg_button"
+        android:layout_above="@+id/ass_choose"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/ass_face_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryText"
+        android:text="未检测到人脸"
+        android:layout_above="@id/ass_photograph"/>
 
 </RelativeLayout>
