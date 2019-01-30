@@ -57,9 +57,11 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
      */
     private boolean isFirstEnter = true;
 
+    private String[] iurl;
     public PhotoWallAdapter(Context context, int textViewResourceId, String[] objects,
                             GridView photoWall) {
         super(context, textViewResourceId, objects);
+        iurl = objects;
         mPhotoWall = photoWall;
         taskCollection = new HashSet<BitmapWorkerTask>();
         // 获取应用程序最大可用内存
@@ -77,6 +79,7 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final String url = getItem(position);
+        Log.d("fuck", "url = "+url);
         View view;
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.photo_layout, null);
@@ -168,7 +171,7 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
     private void loadBitmaps(int firstVisibleItem, int visibleItemCount) {
         try {
             for (int i = firstVisibleItem; i < firstVisibleItem + visibleItemCount; i++) {
-                String imageUrl = Images.imageThumbUrls.get(i);
+                String imageUrl = iurl[i];
                 Bitmap bitmap = getBitmapFromMemoryCache(imageUrl);
                 if (bitmap == null) {
                     BitmapWorkerTask task = new BitmapWorkerTask();
@@ -226,6 +229,8 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
             ImageView imageView = (ImageView) mPhotoWall.findViewWithTag(imageUrl);
             if (imageView != null && bitmap != null) {
                 imageView.setImageBitmap(bitmap);
+            }else {
+                Log.d("fuck", "这里吗？");
             }
             taskCollection.remove(this);
         }
