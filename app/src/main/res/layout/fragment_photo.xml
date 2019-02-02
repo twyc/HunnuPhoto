@@ -7,10 +7,11 @@
         android:id="@+id/photo_wall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnWidth="90dip"
+        android:columnWidth="120dip"
         android:stretchMode="columnWidth"
-        android:numColumns="auto_fit"
+        android:numColumns="3"
         android:verticalSpacing="10dip"
-        android:gravity="center"
-        ></GridView>
+        android:gravity="center">
+
+    </GridView>
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.taifua.material;
+package com.taifua.hunnuphoto;
 
 import java.io.FileInputStream;
 import java.net.HttpURLConnection;
@@ -23,9 +23,9 @@ import android.widget.ImageView;
 
 /**
  * GridView的适配器，负责异步从网络上下载图片展示在照片墙上。
- *
  */
-public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollListener {
+public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollListener
+{
 
     /**
      * 记录所有正在下载或等待下载的任务。
@@ -58,8 +58,9 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
     private boolean isFirstEnter = true;
 
     private String[] iurl;
-    public PhotoWallAdapter(Context context, int textViewResourceId, String[] objects,
-                            GridView photoWall) {
+
+    public PhotoWallAdapter(Context context, int textViewResourceId, String[] objects, GridView photoWall)
+    {
         super(context, textViewResourceId, objects);
         iurl = objects;
         mPhotoWall = photoWall;
@@ -68,22 +69,29 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
         int maxMemory = (int) Runtime.getRuntime().maxMemory();
         int cacheSize = maxMemory / 8;
         // 设置图片缓存大小为程序最大可用内存的1/8
-        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize)
+        {
             @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
+            protected int sizeOf(String key, Bitmap bitmap)
+            {
                 return bitmap.getByteCount();
             }
         };
         mPhotoWall.setOnScrollListener(this);
     }
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         final String url = getItem(position);
-        Log.d("fuck", "url = "+url);
+        Log.d("fuck", "url = " + url);
         View view;
-        if (convertView == null) {
+        if (convertView == null)
+        {
             view = LayoutInflater.from(getContext()).inflate(R.layout.photo_layout, null);
-        } else {
+        }
+        else
+        {
             view = convertView;
         }
         final ImageView photo = (ImageView) view.findViewById(R.id.photo);
@@ -97,30 +105,32 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
      * 给ImageView设置图片。首先从LruCache中取出图片的缓存，设置到ImageView上。如果LruCache中没有该图片的缓存，
      * 就给ImageView设置一张默认图片。
      *
-     * @param imageUrl
-     *            图片的URL地址，用于作为LruCache的键。
-     * @param imageView
-     *            用于显示图片的控件。
+     * @param imageUrl  图片的URL地址，用于作为LruCache的键。
+     * @param imageView 用于显示图片的控件。
      */
-    private void setImageView(String imageUrl, ImageView imageView) {
+    private void setImageView(String imageUrl, ImageView imageView)
+    {
         Bitmap bitmap = getBitmapFromMemoryCache(imageUrl);
-        if (bitmap != null) {
+        if (bitmap != null)
+        {
             imageView.setImageBitmap(bitmap);
-        } else {
-            imageView.setImageResource(R.drawable.taifu);
+        }
+        else
+        {
+            imageView.setImageResource(R.drawable.defaultimage);
         }
     }
 
     /**
      * 将一张图片存储到LruCache中。
      *
-     * @param key
-     *            LruCache的键，这里传入图片的URL地址。
-     * @param bitmap
-     *            LruCache的键，这里传入从网络上下载的Bitmap对象。
+     * @param key    LruCache的键，这里传入图片的URL地址。
+     * @param bitmap LruCache的键，这里传入从网络上下载的Bitmap对象。
      */
-    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-        if (getBitmapFromMemoryCache(key) == null) {
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap)
+    {
+        if (getBitmapFromMemoryCache(key) == null)
+        {
             mMemoryCache.put(key, bitmap);
         }
     }
@@ -128,32 +138,37 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
     /**
      * 从LruCache中获取一张图片，如果不存在就返回null。
      *
-     * @param key
-     *            LruCache的键，这里传入图片的URL地址。
+     * @param key LruCache的键，这里传入图片的URL地址。
      * @return 对应传入键的Bitmap对象，或者null。
      */
-    public Bitmap getBitmapFromMemoryCache(String key) {
+    public Bitmap getBitmapFromMemoryCache(String key)
+    {
         return mMemoryCache.get(key);
     }
 
     @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    public void onScrollStateChanged(AbsListView view, int scrollState)
+    {
         // 仅当GridView静止时才去下载图片，GridView滑动时取消所有正在下载的任务
-        if (scrollState == SCROLL_STATE_IDLE) {
+        if (scrollState == SCROLL_STATE_IDLE)
+        {
             loadBitmaps(mFirstVisibleItem, mVisibleItemCount);
-        } else {
+        }
+        else
+        {
             cancelAllTasks();
         }
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                         int totalItemCount) {
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
+    {
         mFirstVisibleItem = firstVisibleItem;
         mVisibleItemCount = visibleItemCount;
         // 下载的任务应该由onScrollStateChanged里调用，但首次进入程序时onScrollStateChanged并不会调用，
         // 因此在这里为首次进入程序开启下载任务。
-        if (isFirstEnter && visibleItemCount > 0) {
+        if (isFirstEnter && visibleItemCount > 0)
+        {
             loadBitmaps(firstVisibleItem, visibleItemCount);
             isFirstEnter = false;
         }
@@ -163,28 +178,34 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
      * 加载Bitmap对象。此方法会在LruCache中检查所有屏幕中可见的ImageView的Bitmap对象，
      * 如果发现任何一个ImageView的Bitmap对象不在缓存中，就会开启异步线程去下载图片。
      *
-     * @param firstVisibleItem
-     *            第一个可见的ImageView的下标
-     * @param visibleItemCount
-     *            屏幕中总共可见的元素数
+     * @param firstVisibleItem 第一个可见的ImageView的下标
+     * @param visibleItemCount 屏幕中总共可见的元素数
      */
-    private void loadBitmaps(int firstVisibleItem, int visibleItemCount) {
-        try {
-            for (int i = firstVisibleItem; i < firstVisibleItem + visibleItemCount; i++) {
+    private void loadBitmaps(int firstVisibleItem, int visibleItemCount)
+    {
+        try
+        {
+            for (int i = firstVisibleItem; i < firstVisibleItem + visibleItemCount; i++)
+            {
                 String imageUrl = iurl[i];
                 Bitmap bitmap = getBitmapFromMemoryCache(imageUrl);
-                if (bitmap == null) {
+                if (bitmap == null)
+                {
                     BitmapWorkerTask task = new BitmapWorkerTask();
                     taskCollection.add(task);
                     task.execute(imageUrl);
-                } else {
+                }
+                else
+                {
                     ImageView imageView = (ImageView) mPhotoWall.findViewWithTag(imageUrl);
-                    if (imageView != null && bitmap != null) {
+                    if (imageView != null && bitmap != null)
+                    {
                         imageView.setImageBitmap(bitmap);
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -192,9 +213,12 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
     /**
      * 取消所有正在下载或等待下载的任务。
      */
-    public void cancelAllTasks() {
-        if (taskCollection != null) {
-            for (BitmapWorkerTask task : taskCollection) {
+    public void cancelAllTasks()
+    {
+        if (taskCollection != null)
+        {
+            for (BitmapWorkerTask task : taskCollection)
+            {
                 task.cancel(false);
             }
         }
@@ -203,7 +227,8 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
     /**
      * 异步下载图片的任务。
      */
-    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap>
+    {
 
         /**
          * 图片的URL地址
@@ -211,11 +236,13 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
         private String imageUrl;
 
         @Override
-        protected Bitmap doInBackground(String... params) {
+        protected Bitmap doInBackground(String... params)
+        {
             imageUrl = params[0];
             // 在后台开始下载图片
             Bitmap bitmap = downloadBitmap(params[0]);
-            if (bitmap != null) {
+            if (bitmap != null)
+            {
                 // 图片下载完成后缓存到LrcCache中
                 addBitmapToMemoryCache(params[0], bitmap);
             }
@@ -223,13 +250,17 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
         }
 
         @Override
-        protected void onPostExecute(Bitmap bitmap) {
+        protected void onPostExecute(Bitmap bitmap)
+        {
             super.onPostExecute(bitmap);
             // 根据Tag找到相应的ImageView控件，将下载好的图片显示出来。
             ImageView imageView = (ImageView) mPhotoWall.findViewWithTag(imageUrl);
-            if (imageView != null && bitmap != null) {
+            if (imageView != null && bitmap != null)
+            {
                 imageView.setImageBitmap(bitmap);
-            }else {
+            }
+            else
+            {
                 Log.d("fuck", "这里吗？");
             }
             taskCollection.remove(this);
@@ -238,29 +269,37 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
         /**
          * 建立HTTP请求，并获取Bitmap对象。
          *
-         * @param imageUrl
-         *            图片的URL地址
+         * @param imageUrl 图片的URL地址
          * @return 解析后的Bitmap对象
          */
-        private Bitmap downloadBitmap(String imageUrl) {
+        private Bitmap downloadBitmap(String imageUrl)
+        {
             FileInputStream fis = null;
             Bitmap bitmap = null;
-            try {
+            try
+            {
                 fis = new FileInputStream(imageUrl);
-            }catch (Exception e){
+            } catch (Exception e)
+            {
                 e.printStackTrace();
             }
-            if(fis != null) {
+            if (fis != null)
+            {
                 bitmap = BitmapFactory.decodeStream(fis);
-            }else{
-                Log.d("wyc: ","fuck");
+            }
+            else
+            {
+                Log.d("wyc: ", "fuck");
             }
             return bitmap;
         }
-        private  Bitmap downloadBitmapByhttp(String imageUrl){
+
+        private Bitmap downloadBitmapByhttp(String imageUrl)
+        {
             Bitmap bitmap = null;
             HttpURLConnection con = null;
-            try {
+            try
+            {
                 URL url = new URL(imageUrl);
                 con = (HttpURLConnection) url.openConnection();
                 con.setConnectTimeout(5 * 1000);
@@ -268,10 +307,13 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
                 con.setDoInput(true);
                 con.setDoOutput(true);
                 bitmap = BitmapFactory.decodeStream(con.getInputStream());
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 e.printStackTrace();
-            } finally {
-                if (con != null) {
+            } finally
+            {
+                if (con != null)
+                {
                     con.disconnect();
                 }
             }

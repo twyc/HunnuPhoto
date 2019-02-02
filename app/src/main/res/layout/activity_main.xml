@@ -33,7 +33,6 @@
             app:itemBackground="@android:color/white"
             app:menu="@menu/nav_bottom" />
 
-
     </LinearLayout>
 
 

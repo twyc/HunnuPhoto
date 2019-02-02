@@ -1,4 +1,4 @@
-package com.taifua.material;
+package com.taifua.hunnuphoto;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

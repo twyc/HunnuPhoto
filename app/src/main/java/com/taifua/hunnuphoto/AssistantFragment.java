@@ -1,4 +1,4 @@
-package com.taifua.material;
+package com.taifua.hunnuphoto;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.media.FaceDetector;
 import android.net.Uri;
@@ -46,6 +45,7 @@ public class AssistantFragment extends Fragment
     private Uri imageUri;
     private final static int photographCode = 1;
     private final static int chooseCode = 2;
+    private final static String sampleName = "image.jpg";
     private int faceDetectedNumber;
 
     @Override
@@ -81,7 +81,7 @@ public class AssistantFragment extends Fragment
             switch (view.getId())
             {
                 case R.id.ass_photograph:
-                    File outputImage = new File(getActivity().getExternalCacheDir(), "iamge.jpg");
+                    File outputImage = new File(getActivity().getExternalCacheDir(), sampleName);
                     try
                     {
                         if (outputImage.exists())
@@ -92,7 +92,7 @@ public class AssistantFragment extends Fragment
                         e.printStackTrace();
                     }
                     if (Build.VERSION.SDK_INT >= 24)
-                        imageUri = FileProvider.getUriForFile(getContext(), "com.taifua.material.fileprovider", outputImage);
+                        imageUri = FileProvider.getUriForFile(getContext(), "com.taifua.hunnuphoto.fileprovider", outputImage);
                     else
                         imageUri = Uri.fromFile(outputImage);
                     intent = new Intent("android.media.action.IMAGE_CAPTURE");

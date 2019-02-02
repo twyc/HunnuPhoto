@@ -1,4 +1,4 @@
-package com.taifua.material;
+package com.taifua.hunnuphoto;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,7 +17,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +31,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -45,42 +49,62 @@ import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
 
 
-public class AlbumFragment extends Fragment
+public class FaceFragment extends Fragment implements View.OnClickListener
 {
-
-    private static final int CHOOSE_PHOTO = 2;
-    private Button button;
+    private static final int CHOOSE_PHOTO = 102;
+    private static final int TAKE_PHOTO = 101;
+    private Button mButton1;
+    private Button mButton2;
     private ImageView imageView;
     private TextView imageResult;
     private TextView imageSize;
     private TextView imageName;
+    private Uri imageUri;
+    private static final int COM_RATIO = 100;
     private static final int UPDATE_TEXT = 1;
+    private final static String sampleName = "image.jpg";
     StringBuffer resultText = new StringBuffer();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_album, container, false);
+        return inflater.inflate(R.layout.fragment_face, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
-        button = view.findViewById(R.id.choose_from_album);
+        mButton1 = view.findViewById(R.id.take_photo);
+        mButton2 = view.findViewById(R.id.choose_from_album);
         imageView = view.findViewById(R.id.picture);
         imageResult = view.findViewById(R.id.image_result);
         imageSize = view.findViewById(R.id.image_size);
         imageName = view.findViewById(R.id.image_name);
-        button.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                openAlbum();
-            }
-        });
+        mButton1.setOnClickListener(this);
+        mButton2.setOnClickListener(this);
     }
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.take_photo:
+                takePhoto();
+                break;
+            case R.id.choose_from_album:
+                openAlbum();
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    /*
+     * 异步消息处理，在主线程中更改UI
+     */
 
     private final Handler handler = new Handler()
     {
@@ -89,6 +113,7 @@ public class AlbumFragment extends Fragment
             switch (msg.what)
             {
                 case UPDATE_TEXT:
+                    Log.d(TAG, "handleMessage: " + resultText);
                     imageResult.setText(resultText);
                     break;
                 default:
@@ -97,6 +122,35 @@ public class AlbumFragment extends Fragment
         }
     };
 
+    /*
+     * 打开相机
+     */
+
+    private void takePhoto()
+    {
+        Intent intent;
+        File outputImage = new File(getActivity().getExternalCacheDir(), sampleName);
+        try
+        {
+            if (outputImage.exists())
+                outputImage.delete();
+            outputImage.createNewFile();
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= 24)
+            imageUri = FileProvider.getUriForFile(getContext(), "com.taifua.hunnuphoto.fileprovider", outputImage);
+        else
+            imageUri = Uri.fromFile(outputImage);
+        intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, TAKE_PHOTO);
+    }
+
+    /*
+     * 打开相册
+     */
     private void openAlbum()
     {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
@@ -109,6 +163,28 @@ public class AlbumFragment extends Fragment
     {
         switch (requestCode)
         {
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK)
+                {
+                    try
+                    {
+                        imageView.setImageURI(imageUri);
+                        Bitmap bm = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
+                        String imageBase64 = bitmapToBase64(bm);
+                        String address = "http://139.9.83.2:8080/Photos/GetVector.do";
+                        String imageType = "jpg";
+                        int imageHeight = bm.getHeight();
+                        int imageWidth = bm.getWidth();
+                        imageName.setText(sampleName);
+                        imageSize.setText(imageWidth + " * " + imageHeight);
+                        fetchDataByPost(address, imageBase64, imageType);
+                    }
+                    catch (FileNotFoundException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                break;
             case CHOOSE_PHOTO:
                 if (resultCode == RESULT_OK)
                 {
@@ -136,10 +212,11 @@ public class AlbumFragment extends Fragment
         }
     }
 
-    public static String bitmapToBase64(Bitmap bitmap)
+    private String bitmapToBase64(Bitmap bitmap)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+//        bitmap = changeBitmapSize(bitmap);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, COM_RATIO, bos);
         byte[] bytes = bos.toByteArray();
         return new String(Base64.encode(bytes, Base64.NO_WRAP));
     }
@@ -184,6 +261,7 @@ public class AlbumFragment extends Fragment
 
     private void parseJSONWithJSONObject(String jsonData)
     {
+        resultText = new StringBuffer();
         try
         {
             JSONArray jsonArray = new JSONArray(jsonData);
@@ -195,15 +273,29 @@ public class AlbumFragment extends Fragment
                 Log.d(TAG, "val is " + val);
                 Log.d(TAG, "pos is " + pos);
                 resultText.append(pos).append(" ");
+                Log.d(TAG, "for parseJSONWithJSONObject: " + resultText);
             }
         } catch (Exception e)
         {
             e.printStackTrace();
         }
-        Log.d(TAG, "parseJSONWithJSONObject: " + resultText);
         Message message = new Message();
         message.what = UPDATE_TEXT;
         handler.sendMessage(message);
+    }
+
+    private Bitmap changeBitmapSize(Bitmap bitmap)
+    {
+        int bWidth = bitmap.getWidth();
+        int bHeight = bitmap.getHeight();
+        if (bWidth > 2000)
+        {
+            float scale = bWidth / 1000;
+            Matrix matrix = new Matrix();
+            matrix.postScale(scale, scale);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bWidth, bHeight, matrix, true);
+        }
+        return bitmap;
     }
 
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs)

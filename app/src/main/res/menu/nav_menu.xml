@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_call"
-            android:icon="@drawable/ic_call"
-            android:title="Call"/>
-        <item android:id="@+id/nav_friends"
-            android:icon="@drawable/ic_group"
-            android:title="Friends"/>
-        <item android:id="@+id/nav_location"
-            android:icon="@drawable/ic_location"
-            android:title="Location"/>
-        <item android:id="@+id/nav_mail"
-            android:icon="@drawable/ic_mail"
-            android:title="Mail"/>
-        <item android:id="@+id/nav_task"
-            android:icon="@drawable/ic_books"
-            android:title="Tasks"/>
-    </group>
+        <item android:id="@+id/nav_photo"
+            android:orderInCategory="0"
+            android:icon="@drawable/ic_photo"
+            android:title="Photos"/>
+        <item android:id="@+id/nav_face"
+            android:orderInCategory="1"
+            android:icon="@drawable/ic_face"
+            android:title="Faces"/>
+        <item android:id="@+id/nav_things"
+            android:orderInCategory="2"
+            android:icon="@drawable/ic_assistant"
+            android:title="Things"/>
+        <item android:id="@+id/nav_share"
+            android:orderInCategory="3"
+            android:icon="@drawable/ic_filter"
+            android:title="Search"/>
 </menu>

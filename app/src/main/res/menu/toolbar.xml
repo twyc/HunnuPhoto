@@ -2,8 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/more"
-        android:icon="@drawable/ic_more"
-        android:title="Setting"
+    <item android:id="@+id/take_photo"
+        android:icon="@drawable/ic_take_photo"
+        android:title="关于"
+        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/about"
+        android:title="关于"
+        app:showAsAction="never"/>
+    <item android:id="@+id/feedback"
+        android:title="反馈"
+        app:showAsAction="never"/>
+    <item android:id="@+id/share"
+        android:title="分享"
         app:showAsAction="never"/>
 </menu>

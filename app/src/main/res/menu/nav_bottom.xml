@@ -3,18 +3,18 @@
     <item android:id="@+id/nav_photo"
         android:orderInCategory="0"
         android:icon="@drawable/ic_photo"
-        android:title="Photos"/>
-    <item android:id="@+id/nav_album"
+        android:title="照片"/>
+    <item android:id="@+id/nav_face"
         android:orderInCategory="1"
-        android:icon="@drawable/ic_photo_album"
-        android:title="Albums"/>
-    <item android:id="@+id/nav_assistant"
+        android:icon="@drawable/ic_face"
+        android:title="人脸"/>
+    <item android:id="@+id/nav_things"
         android:orderInCategory="2"
         android:icon="@drawable/ic_assistant"
-        android:title="Assistant"/>
+        android:title="事物"/>
     <item android:id="@+id/nav_share"
         android:orderInCategory="3"
-        android:icon="@drawable/ic_people"
-        android:title="Sharing"/>
+        android:icon="@drawable/ic_filter"
+        android:title="检索"/>
 
 </menu>

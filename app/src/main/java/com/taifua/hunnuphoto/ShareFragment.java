@@ -1,9 +1,11 @@
-package com.taifua.material;
+package com.taifua.hunnuphoto;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -18,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ShareFragment extends Fragment {
+public class ShareFragment extends Fragment
+{
     private SearchView searchView;
     private ListView listView;
     private GridView mPhotoWall;
@@ -30,15 +33,19 @@ public class ShareFragment extends Fragment {
     private listViewAdapter findAdapter;
     private Bitmap bitmap;
     private MatchString matchString = new MatchString();
-    private String []url;
+    private String[] url;
 
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
+    private Handler handler = new Handler()
+    {
+        public void handleMessage(Message msg)
+        {
+            switch (msg.what)
+            {
                 case 123:
 //                    adapter = new listViewAdapter(getContext(), list);
 //                    listView.setAdapter(adapter);
-                    for(int i = 0; i < list.size(); i++) {
+                    for (int i = 0; i < list.size(); i++)
+                    {
                         String information = list.get(i);
 //                        nameList.add(information);
                     }
@@ -46,8 +53,10 @@ public class ShareFragment extends Fragment {
             }
         }
     };
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_share, container, false);
         super.onCreate(savedInstanceState);
         mPhotoWall = (GridView) view.findViewById(R.id.photo4wall);
@@ -62,21 +71,27 @@ public class ShareFragment extends Fragment {
          */
         searchView.setSubmitButtonEnabled(true);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
             //输入完成后，提交时触发的方法，一般情况是点击输入法中的搜索按钮才会触发，表示现在正式提交了
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(String query)
+            {
 
-                if(TextUtils.isEmpty(query)) {
+                if (TextUtils.isEmpty(query))
+                {
                     Toast.makeText(getContext(), "请输入查找内容！", Toast.LENGTH_SHORT).show();
                     listView.setAdapter(adapter);
                 }
-                else {
+                else
+                {
                     findList.clear();
                     findList = matchString.bf(query);
-                    if(findList.size() == 0) {
+                    if (findList.size() == 0)
+                    {
                         Toast.makeText(getContext(), "没有这个文件夹或者图片", Toast.LENGTH_SHORT).show();
                     }
-                    else {
+                    else
+                    {
                         Toast.makeText(getContext(), "查找成功", Toast.LENGTH_SHORT).show();
                         url = new String[findList.size()];
                         padapter = new PhotoWallAdapter(getContext(), 0, findList.toArray(url), mPhotoWall);
@@ -89,15 +104,20 @@ public class ShareFragment extends Fragment {
             }
 
             //在输入时触发的方法，当字符真正显示到searchView中才触发，像是拼音，在输入法组词的时候不会触发
-            public boolean onQueryTextChange(String newText) {
-                if(TextUtils.isEmpty(newText)) {
+            public boolean onQueryTextChange(String newText)
+            {
+                if (TextUtils.isEmpty(newText))
+                {
                     listView.setAdapter(adapter);
                 }
-                else {
+                else
+                {
                     findList.clear();
-                    for(int i = 0; i < list.size(); i++) {
+                    for (int i = 0; i < list.size(); i++)
+                    {
                         String information = list.get(i);
-                        if(information.contains(newText)) {
+                        if (information.contains(newText))
+                        {
                             findList.add(information);
                         }
                     }
@@ -109,8 +129,10 @@ public class ShareFragment extends Fragment {
             }
         });
 
-        new Thread(new Runnable() {
-            public void run() {
+        new Thread(new Runnable()
+        {
+            public void run()
+            {
                 list = Images.imageThumbUrls;
                 Message message = new Message();
                 message.what = 123;
@@ -119,5 +141,17 @@ public class ShareFragment extends Fragment {
             }
         }).start();
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
     }
 }
