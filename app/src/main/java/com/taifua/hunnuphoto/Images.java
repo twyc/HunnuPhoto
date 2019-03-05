@@ -6,20 +6,24 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Images
 {
-    private static List<ImgFolderBean> imgFolderList;
+    private static List<ImgFolderBean> imgFolderList = new ArrayList<>();
     public static List<String> imageThumbUrls = new ArrayList<>();
 
     public static void init(Context context)
     {
         FileManager fileManager = FileManager.getInstance(context);
         imgFolderList = fileManager.getImageFolders();
-        for (ImgFolderBean imgFolderBean : imgFolderList)
-        {
-            for (String s : fileManager.getImgListByDir(imgFolderBean.getDir()))
-                imageThumbUrls.add(s);
+
+    }
+
+    public static void getImg(String dir, Context context){
+        FileManager fileManager = FileManager.getInstance(context);
+        imgFolderList.clear();
+        for (String s : fileManager.getImgListByDir(dir)) {
+            imageThumbUrls.add(s);
         }
-        Log.d("图片总共有多少: ", "" + imageThumbUrls.size());
     }
 }

@@ -1,14 +1,11 @@
 package com.taifua.hunnuphoto;
 
-import java.io.FileInputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.LruCache;
@@ -20,6 +17,12 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import java.io.FileInputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * GridView的适配器，负责异步从网络上下载图片展示在照片墙上。
@@ -88,13 +91,15 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
         View view;
         if (convertView == null)
         {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.photo_layout, null);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.photo_layout , null);
         }
         else
         {
             view = convertView;
         }
+        Log.d("fuck", "这里还行");
         final ImageView photo = (ImageView) view.findViewById(R.id.photo);
+        Log.d("fuck", "这里不行");
         // 给ImageView设置一个Tag，保证异步加载图片时不会乱序
         photo.setTag(url);
         setImageView(url, photo);
@@ -229,7 +234,38 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
      */
     class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap>
     {
+        /**
+         * https://blog.csdn.net/jpl1880/article/details/84563084
+         * @param bitmap
+         * @return
+         */
+        private  Bitmap getResizedBitmap(Bitmap bitmap,float newWidth, float newHeight) {
+            if (bitmap.getHeight()>bitmap.getWidth()){
+                newHeight=300f;
+                newWidth= (int) (bitmap.getWidth()*(newHeight/(float) bitmap.getHeight()));
+            }else{
+                newWidth=300f;
+                newHeight= (int) (bitmap.getHeight()*(newWidth/(float) bitmap.getWidth()));
+            }
 
+            Bitmap resizedBitmap = Bitmap.createBitmap((int)newWidth,(int) newHeight, Bitmap.Config.ARGB_8888);
+
+
+            float scaleX = newWidth / (float) bitmap.getWidth();
+            float scaleY = newHeight / (float) bitmap.getHeight();
+            float pivotX = 0;
+            float pivotY = 0;
+
+            Matrix scaleMatrix = new Matrix();
+            scaleMatrix.setScale(scaleX, scaleY, pivotX, pivotY);
+            Canvas canvas = new Canvas(resizedBitmap);
+            canvas.setMatrix(scaleMatrix);
+            canvas.drawBitmap(bitmap, 0, 0, new Paint(Paint.FILTER_BITMAP_FLAG |
+                    Paint.DITHER_FLAG |
+                    Paint.ANTI_ALIAS_FLAG));
+
+            return resizedBitmap;
+        }
         /**
          * 图片的URL地址
          */
@@ -291,7 +327,7 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
             {
                 Log.d("wyc: ", "fuck");
             }
-            return bitmap;
+            return getResizedBitmap(bitmap, 50, 50);
         }
 
         private Bitmap downloadBitmapByhttp(String imageUrl)

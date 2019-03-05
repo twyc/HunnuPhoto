@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -60,6 +61,7 @@ public class FileManager
 
     /**
      * 得到图片文件夹集合
+     * 这里没有name 所以把name的获取写到bean类里面的getName去了
      */
     public List<ImgFolderBean> getImageFolders()
     {
@@ -81,6 +83,7 @@ public class FileManager
                     continue;
 
                 mDirs.add(dir);//添加到保存目录的集合中
+                Log.d("fuck", "这里有啊");
                 ImgFolderBean folderBean = new ImgFolderBean();
                 folderBean.setDir(dir);
                 folderBean.setFistImgPath(path);
@@ -104,6 +107,7 @@ public class FileManager
         } catch (Exception e)
         {
             e.printStackTrace();
+            Log.d("fuck", "这个异常是这样的: "+e.getMessage());
         } finally
         {
             if (c != null)
@@ -111,7 +115,7 @@ public class FileManager
                 c.close();
             }
         }
-
+        Log.d("fuck", "图片文件夹有" + folders.size());
         return folders;
     }
 }

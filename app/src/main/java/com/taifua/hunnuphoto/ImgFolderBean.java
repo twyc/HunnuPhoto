@@ -19,9 +19,7 @@ public class ImgFolderBean
      */
     private int count;
 
-    public ImgFolderBean()
-    {
-    }
+    public ImgFolderBean(){}
 
     public ImgFolderBean(String dir, String fistImgPath, String name, int count)
     {
@@ -53,6 +51,19 @@ public class ImgFolderBean
 
     public String getName()
     {
+        name ="";
+        int len = dir.length();
+        for (int i=len-1;i>0;i--){
+            if(dir.charAt(i) == '/'){
+                break;
+            }
+            name += dir.charAt(i);
+        }
+        name = new StringBuilder(name).reverse().toString();
+        len = name.length();
+        for(;len<30;len++){
+            name+=" ";
+        }
         return name;
     }
 
