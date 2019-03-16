@@ -1,6 +1,7 @@
 package com.taifua.hunnuphoto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,6 +18,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.net.HttpURLConnection;
@@ -103,6 +105,15 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
         // 给ImageView设置一个Tag，保证异步加载图片时不会乱序
         photo.setTag(url);
         setImageView(url, photo);
+        photo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(getContext(), PhotoActivity.class);
+                intent.putExtra("url",url);
+                Toast.makeText(getContext(), "点到了 ", Toast.LENGTH_SHORT).show();
+                getContext().startActivity(intent);
+            }
+        });
         return view;
     }
 

@@ -92,6 +92,11 @@ public class ImageUtils {
         return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
     }
 
+    public Bitmap getImage(String srcPath){
+        BitmapFactory.Options newOpts = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);//此时返回bm为空
+        return bitmap;
+    }
     /**
      * 图片按比例大小压缩方法（根据Bitmap图片压缩）
      */
