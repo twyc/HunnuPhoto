@@ -3,7 +3,6 @@ package com.taifua.hunnuphoto;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ public class PhotoFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
         FileManager fileManager = FileManager.getInstance(getContext());
+        //照片文件夹的来源
         final List<ImgFolderBean> list= fileManager.getImageFolders();
         FolderAdapter adapter = new FolderAdapter(getContext(), R.layout.folder_item, list);
         ListView listView = (ListView) view.findViewById(R.id.list_view);

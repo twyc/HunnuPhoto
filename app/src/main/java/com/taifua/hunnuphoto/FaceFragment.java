@@ -129,6 +129,8 @@ public class FaceFragment extends Fragment implements View.OnClickListener
     private void takePhoto()
     {
         Intent intent;
+        String path = getActivity().getExternalCacheDir().getPath();
+        Log.d("fuck", "到底在哪 " + path);
         File outputImage = new File(getActivity().getExternalCacheDir(), sampleName);
         try
         {

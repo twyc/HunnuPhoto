@@ -2,6 +2,7 @@ package com.taifua.hunnuphoto;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +42,9 @@ public class FolderAdapter extends ArrayAdapter<ImgFolderBean> {
         folderName.setText(imgFolder.getName());
         folderCnt.setText(""+imgFolder.getCount());
 
-        Bitmap bitmap = imageUtils.getimage(imgFolder.getFistImgPath());
-        folderImage.setImageBitmap(bitmap);
+//        Bitmap bitmap = imageUtils.getimage(imgFolder.getFistImgPath());
+        Bitmap icon = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.defaultimage);
+        folderImage.setImageBitmap(imageUtils.zoomImage(icon,255,255));
         return view;
     }
 }

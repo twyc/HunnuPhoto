@@ -21,7 +21,7 @@ public class Images
 
     public static void getImg(String dir, Context context){
         FileManager fileManager = FileManager.getInstance(context);
-        imgFolderList.clear();
+        imageThumbUrls.clear();
         for (String s : fileManager.getImgListByDir(dir)) {
             imageThumbUrls.add(s);
         }

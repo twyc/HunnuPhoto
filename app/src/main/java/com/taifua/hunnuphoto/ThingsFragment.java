@@ -55,6 +55,8 @@ public class ThingsFragment extends Fragment implements View.OnClickListener
     private static final int TAKE_PHOTO = 101;
     private Button mButton1;
     private Button mButton2;
+    private Button mButton3;
+    private Button mButton4;
     private ImageView imageView;
     private TextView imageResult;
     private TextView imageSize;
@@ -77,15 +79,14 @@ public class ThingsFragment extends Fragment implements View.OnClickListener
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
-        mButton1 = view.findViewById(R.id.take_photo);
-        mButton2 = view.findViewById(R.id.choose_from_album);
-        imageView = view.findViewById(R.id.picture);
-        imageResult = view.findViewById(R.id.image_result);
-        imageSize = view.findViewById(R.id.image_size);
-        imageName = view.findViewById(R.id.image_name);
+        mButton1 = view.findViewById(R.id.isBookMaterialButton);
+        mButton2 = view.findViewById(R.id.isOutdoorSceneryButton);
+        mButton2 = view.findViewById(R.id.isGroupPhotoButton);
+        mButton2 = view.findViewById(R.id.isSocialPlaceButton);
         mButton1.setOnClickListener(this);
         mButton2.setOnClickListener(this);
-        thingsInit();
+        mButton2.setOnClickListener(this);
+        mButton2.setOnClickListener(this);
     }
 
 
