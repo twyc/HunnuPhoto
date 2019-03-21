@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private ViewPager viewPager;
     private NavigationView navView;
     private BottomNavigationView bottomNavigationView;
+    private FacenetFragment facenetFragment = new FacenetFragment();
     private PhotoFragment photoFragment = new PhotoFragment();
     private FaceFragment albumFragment = new FaceFragment();
-    private AssistantFragment assistantFragment = new AssistantFragment();
     private ShareFragment shareFragment = new ShareFragment();
     private ThingsFragment thingsFragment = new ThingsFragment();
     private long exitTime = 0;
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     case 0:
                         return photoFragment;
                     case 1:
-                        return albumFragment;
+                        return facenetFragment;
                     case 2:
                         return thingsFragment;
                     case 3:

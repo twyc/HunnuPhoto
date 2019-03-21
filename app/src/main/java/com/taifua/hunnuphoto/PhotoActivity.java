@@ -12,12 +12,10 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-        Log.d("fuck", "Activity打开了");
         Intent intent = getIntent();
         String url = intent.getStringExtra("url");
         ImageView photo = (ImageView) findViewById(R.id.bigPhoto);
         ImageUtils imageUtils = new ImageUtils();
-        Log.d("fuck", url);
         photo.setImageBitmap(imageUtils.getImage(url));
     }
 }
